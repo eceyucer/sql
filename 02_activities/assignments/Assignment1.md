@@ -106,6 +106,9 @@ Please do not pick the exact same tables that I have already diagrammed. For exa
 	- <img src="./images/01_farmers_market_conceptual_model.png" width="600">
 - The column names can be found in a few spots (DB Schema window in the bottom right, the Database Structure tab in the main window by expanding each table entry, at the top of the Browse Data tab in the main window)
 
+##### My Logical Data Model
+<img src="assignment_one_logical_data_model.png" width="500">
+
 ***
 
 ## Section 2:
@@ -205,5 +208,11 @@ Consider, for example, concepts of fariness, inequality, social structures, marg
 
 
 ```
-Your thoughts...
+The assigned article discusses how databases that embed societal value systems and social constructs profoundly perpetuate inequality and marginalization. 
+For the example of Pakistan's NADRA system, we observe a reflection and reinforcement of hierarchical/patriarchal power dynamics, where a government-official 
+marriage between a man and a woman determines their children's access to essential services. In our daily lives, facial recognition technologies, trained on 
+deeply human-biased databases that are categorized inherently with deep, implicit biases, amplify societal discrimination of racialized individuals, and 
+this is further demonstrated through the use of these technologies in policing. In addition, an attempt to operationalize gender as a boolean, as Pakistan's 
+NADRA system has done until 2009 not only dismisses the existence of non-binary gender identities but also overlooks how gender is inherently a social 
+construct shaped by value systems that, in turn, lead to differential socialization.  
 ```
