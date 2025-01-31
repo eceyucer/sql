@@ -46,9 +46,7 @@ SELECT
 customer_id
 ,market_date
 ,ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY market_date) AS num_of_visits
-FROM customer_purchase
-ORDER BY customer_id, market_date;
-
+FROM customer_purchases;
 
 
 /* 2. Reverse the numbering of the query from a part so each customer’s most recent visit is labeled 1, 
@@ -65,8 +63,7 @@ FROM (
 	,ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS most_recent_visit
 	FROM customer_purchases
 ) x
-WHERE most_recent_visit = 1
-ORDER BY customer_id, market_date;
+WHERE most_recent_visit = 1;
 
 
 /* 3. Using a COUNT() window function, include a value along with each row of the 
@@ -76,7 +73,7 @@ customer_id
 ,product_id
 ,COUNT() OVER (PARTITION BY customer_id, product_id) AS customer_purchase_count
 FROM customer_purchases
-ORDER BY customer_id, product_id, customer_purchase_count;
+ORDER BY customer_id, product_id;
 
 
 -- String manipulations
@@ -100,7 +97,8 @@ FROM product;
 
 /* 2. Filter the query to show any product_size value that contain a number with REGEXP. */
 SELECT
-product_size
+product_name
+,product_size
 FROM product
 WHERE product_size REGEXP  '[0-9]';
 
@@ -190,9 +188,11 @@ ORDER BY vendor_name, product_name;
 This table will contain only products where the `product_qty_type = 'unit'`. 
 It should use all of the columns from the product table, as well as a new column for the `CURRENT_TIMESTAMP`.  
 Name the timestamp column `snapshot_timestamp`. */
+
+DROP TABLE IF EXISTS product_units;
 CREATE TABLE product_units AS
-SELECT product_id, product_name, product_size, product_category_id, product_qty_type
-FROM product
+SELECT p.*
+FROM product AS p
 WHERE product_qty_type = 'unit';
 
 ALTER TABLE product_units 
