@@ -45,16 +45,29 @@ There are several tools online you can use, I'd recommend [Draw.io](https://www.
 
 **HINT:** You do not need to create any data for this prompt. This is a conceptual model only. 
 
+##### Answer:
+<img src="assignment_2_bookstore-prompt1.png" width="500">
+
 #### Prompt 2
 We want to create employee shifts, splitting up the day into morning and evening. Add this to the ERD.
+
+##### Answer:
+<img src="assignment_2_bookstore-prompt2.png" width="500">
 
 #### Prompt 3
 The store wants to keep customer addresses. Propose two architectures for the CUSTOMER_ADDRESS table, one that will retain changes, and another that will overwrite. Which is type 1, which is type 2? 
 
 **HINT:** search type 1 vs type 2 slowly changing dimensions. 
 
+##### Answer:
+<img src="assignment_2_bookstore-prompt3.png" width="500">
+
 ```
-Your answer...
+From my research, a type 1 model would overwrite the old customer address with the new one, while a type 2 model would retain changes.
+In my opinion, in a bookstore database, it'd be more useful to overwrite the old addresses with new ones since keeping data that is not
+utilized would be redundant. However, if address types are not being considered (i.e., home, billing or shipping), a type 1 model might 
+results in a loss of important data. In my model, I have incorporated another table to define address types -- this can come handy if a 
+customer's home and billing addresses are different, and the correct address type can be updated when needed. 
 ```
 
 ***
@@ -182,5 +195,20 @@ Consider, for example, concepts of labour, bias, LLM proliferation, moderating c
 
 
 ```
-Your thoughts...
+The assigned article discusses the limitations of automatization and reliance on human labour to train neural nets. It is a 
+well-known fact that major fast fashion brands rely on human workers who have very low wages and work in oppressive conditions.
+On top of conditions that make it difficult to automatize sewing due to a lack of dexterity from robots and challenges to train
+automated models to keep up with new styles, the current system prefers this exploitative approach to maximize profits. Further,
+training datasets and reliable human coding of these datasets are imperative to building neural nets like large language models (LLM).
+The performance and outputs of these models are as good as their training datasets. If the implicit racial bias and sexist 
+stereotypes that the trainers hold impact the coding of the training datasets, this introduces implicit biases into the models that
+utilize the training sets. For example, in 2019, Google's Vision AI was the face of online discourse when the model was labelling
+a hand-held device differently based on skin tone -- if a Black person was holding the item, it was labelled as a "gun"; in contrast,
+it was labelled as a "monocular" when a white person was holding it. Google Translate is another example, where translating from
+a gender-neutral language such as Turkish to English results in a stereotypical generalization of professions (i.e., a sentence
+referring to a doctor uses he/him pronouns when the input sentence does not indicate gender). Overall, minimizing bias and bigotry 
+in technology and automated models boils down to a need for people to acknowledge their implicit biases and address them through 
+further discussions and better education. 
+
+On a side note, the robot attempting to fold a towel really mirrors my struggles putting a duvet cover on.
 ```
