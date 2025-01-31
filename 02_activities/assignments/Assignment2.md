@@ -195,5 +195,19 @@ Consider, for example, concepts of labour, bias, LLM proliferation, moderating c
 
 
 ```
-Your thoughts...
+The assigned article discusses the limitations of automatization and reliance on human labour to train neural nets. It is a 
+well-known fact that major fast fashion brands rely on human workers who have very low wages and work in oppressive conditions.
+On top of conditions that make it difficult to automatize sewing due to a lack of dexterity from robots and challenges to train
+automated models to keep up with new styles, the current system prefers this exploitative approach to maximize profits. Further,
+training datasets and reliable human coding of these datasets are imperative to building neural nets like large language models (LLM).
+The performance and outputs of these models are as good as their training datasets. If the implicit racial bias and sexist 
+stereotypes that the trainers hold impact the coding of the training datasets, this introduces implicit biases into the models that
+utilize the training sets. For example, in 2019, Google's Vision AI was the face of online discourse when the model was labelling
+a hand-held device differently based on skin tone -- if a Black person was holding the item, it was labelled as a "gun"; in contrast, it was labelled as a "monocular" when a white person was holding it. Google Translate is another example, where translating from
+a gender-neutral language such as Turkish to English results in a stereotypical generalization of professions (i.e., a sentence
+referring to a doctor uses he/him pronouns when the input sentence does not indicate gender). Overall, minimizing bias and bigotry 
+in technology and automated models boils down to a need for people to acknowledge their implicit biases and address them through 
+further discussions and better education. 
+
+On a side note, the robot attempting to fold a towel really mirrors my struggles putting a duvet cover on.
 ```
