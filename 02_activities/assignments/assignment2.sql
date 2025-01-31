@@ -20,15 +20,14 @@ The `||` values concatenate the columns into strings.
 Edit the appropriate columns -- you're making two edits -- and the NULL rows will be fixed. 
 All the other rows will remain the same.) */
 
-SELECT *
-
-,COALESCE(product_size,' ') AS product_size_fixed
-,COALESCE(product_qty_type, 'unit') AS product_qty_type_fixed
-
-FROM product;
+--testing around
+--SELECT *
+--,COALESCE(product_size,' ') AS product_size_fixed
+--,COALESCE(product_qty_type, 'unit') AS product_qty_type_fixed
+--FROM product;
 
 SELECT 
-product_name || ', ' || coalesce(product_size,' ') || ' (' || coalesce(product_qty_type, 'unit')  || ')'
+product_name || ', ' || COALESCE(product_size,' ') || ' (' || COALESCE(product_qty_type, 'unit')  || ')'
 FROM product;
 
 --Windowed Functions
@@ -47,7 +46,8 @@ SELECT
 customer_id
 ,market_date
 ,ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY market_date) AS num_of_visits
-FROM customer_purchases;
+FROM customer_purchase
+ORDER BY customer_id, market_date;
 
 
 
@@ -55,23 +55,18 @@ FROM customer_purchases;
 then write another query that uses this one as a subquery (or temp table) and filters the results to 
 only the customer’s most recent visit. */
 
-SELECT
-customer_id
-,market_date
-,ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS num_of_visits
-FROM customer_purchases;
-
 SELECT 
 customer_id
 ,market_date
 FROM (
-		SELECT
-		customer_id
-		,market_date
-		,ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS most_recent_visit
-		FROM customer_purchases
+	SELECT
+	customer_id
+	,market_date
+	,ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS most_recent_visit
+	FROM customer_purchases
 ) x
-WHERE most_recent_visit = 1;
+WHERE most_recent_visit = 1
+ORDER BY customer_id, market_date;
 
 
 /* 3. Using a COUNT() window function, include a value along with each row of the 
@@ -80,7 +75,8 @@ SELECT DISTINCT
 customer_id
 ,product_id
 ,COUNT() OVER (PARTITION BY customer_id, product_id) AS customer_purchase_count
-FROM customer_purchases;
+FROM customer_purchases
+ORDER BY customer_id, product_id, customer_purchase_count;
 
 
 -- String manipulations
@@ -97,9 +93,9 @@ Hint: you might need to use INSTR(product_name,'-') to find the hyphens. INSTR w
 SELECT
 product_name
 ,CASE WHEN INSTR(product_name,'-')
-		THEN TRIM(SUBSTR(product_name, INSTR(product_name, '-') + 1))
-		ELSE NULL
-		END as description
+	THEN TRIM(SUBSTR(product_name, INSTR(product_name, '-') + 1))
+	ELSE NULL
+	END as description
 FROM product;
 
 /* 2. Filter the query to show any product_size value that contain a number with REGEXP. */
@@ -121,29 +117,29 @@ with a UNION binding them. */
 SELECT
 market_date
 ,daily_sales
-, rank AS [rank]
-, 'the min' AS [preserve]
+,rank AS [rank]
+,'the min' AS [preserve]
 FROM (
-		SELECT DISTINCT
-		market_date
-        ,SUM(quantity * cost_to_customer_per_qty)  AS daily_sales
-        ,RANK() OVER (ORDER BY SUM(quantity * cost_to_customer_per_qty) ASC) AS rank
-		FROM customer_purchases
-		GROUP BY market_date
+	SELECT DISTINCT
+	market_date
+    ,SUM(quantity * cost_to_customer_per_qty)  AS daily_sales
+    ,RANK() OVER (ORDER BY SUM(quantity * cost_to_customer_per_qty) ASC) AS rank
+	FROM customer_purchases
+	GROUP BY market_date
 )x
 WHERE rank = 1
 
 UNION
 
 SELECT *
-, 'the max' AS [preserve]
+,'the max' AS [preserve]
 FROM (
-		SELECT DISTINCT
-		market_date
-        ,SUM(quantity * cost_to_customer_per_qty) AS daily_sales
-        ,RANK() OVER (ORDER BY SUM(quantity * cost_to_customer_per_qty) DESC) AS rank
-		FROM customer_purchases
-		GROUP BY market_date
+	SELECT DISTINCT
+	market_date
+    ,SUM(quantity * cost_to_customer_per_qty) AS daily_sales
+    ,RANK() OVER (ORDER BY SUM(quantity * cost_to_customer_per_qty) DESC) AS rank
+	FROM customer_purchases
+	GROUP BY market_date
 )x
 WHERE rank = 1;
 
@@ -162,24 +158,24 @@ How many customers are there (y).
 Before your final group by you should have the product of those two queries (x*y).  */
 
 WITH vendor_product AS (
-		SELECT DISTINCT
-		vendor_name
-		,product_name
-		,original_price
-		FROM vendor_inventory AS vi
-		INNER JOIN vendor AS V
-				ON vi.vendor_id = v.vendor_id
-		INNER JOIN product AS p
-				ON vi.product_id = p.product_id
+	SELECT DISTINCT
+	vendor_name
+	,product_name
+	,original_price
+	FROM vendor_inventory AS vi
+	INNER JOIN vendor AS V
+		ON vi.vendor_id = v.vendor_id
+	INNER JOIN product AS p
+		ON vi.product_id = p.product_id
 ),
 big_customer_sales AS (
-		SELECT
-		vendor_name
-		,product_name
-		,original_price
-		,customer_id
-		FROM vendor_product
-		CROSS JOIN customer
+	SELECT
+	vendor_name
+	,product_name
+	,original_price
+	,customer_id
+	FROM vendor_product
+	CROSS JOIN customer
 )
 SELECT
 vendor_name
@@ -241,30 +237,30 @@ ADD current_quantity INT;
 -- part one, getting the last quantity per product
 DROP  TABLE IF EXISTS last_quantity_per_product;
 CREATE TEMP TABLE last_quantity_per_product AS 
-		SELECT
-		product_id
-		,quantity
-		FROM (
-				SELECT *
-				,ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY market_date DESC) AS most_recent_day
-				FROM vendor_inventory
-		)x
-		WHERE most_recent_day =1; --create a temp table with most recent quantities of each product in vendor inventory
+	SELECT
+	product_id
+	,quantity
+	FROM (
+		SELECT *
+		,ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY market_date DESC) AS most_recent_day
+		FROM vendor_inventory
+	)x
+	WHERE most_recent_day =1; --create a temp table with most recent quantities of each product in vendor inventory
 
 -- part two, left join to add current quantity values to view the nulls
 SELECT *
 FROM product_units AS pu
 LEFT JOIN last_quantity_per_product AS lqpp
-		ON pu.product_id = lqpp.product_id;
+	ON pu.product_id = lqpp.product_id;
 
 -- part three, actual update
 UPDATE product_units AS pu
 -- set current_quantity to most recent quantity or 0 if null
 SET current_quantity = COALESCE(( --use coalesce to replace any null values with 0
-		SELECT 
-		quantity
-		FROM last_quantity_per_product AS lqpp
-		WHERE lqpp.product_id = pu.product_id
+	SELECT 
+	quantity
+	FROM last_quantity_per_product AS lqpp
+	WHERE lqpp.product_id = pu.product_id
 ), 0);
 
 
