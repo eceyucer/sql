@@ -90,7 +90,6 @@ product_name
 FROM product;
 
 
-
 /* 2. Filter the query to show any product_size value that contain a number with REGEXP. */
 
 SELECT
