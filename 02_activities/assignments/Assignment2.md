@@ -45,16 +45,29 @@ There are several tools online you can use, I'd recommend [Draw.io](https://www.
 
 **HINT:** You do not need to create any data for this prompt. This is a conceptual model only. 
 
+##### Answer:
+<img src="assignment_2_bookstore-prompt1.png" width="500">
+
 #### Prompt 2
 We want to create employee shifts, splitting up the day into morning and evening. Add this to the ERD.
+
+##### Answer:
+<img src="assignment_2_bookstore-prompt2.png" width="500">
 
 #### Prompt 3
 The store wants to keep customer addresses. Propose two architectures for the CUSTOMER_ADDRESS table, one that will retain changes, and another that will overwrite. Which is type 1, which is type 2? 
 
 **HINT:** search type 1 vs type 2 slowly changing dimensions. 
 
+##### Answer:
+<img src="assignment_2_bookstore-prompt3.png" width="500">
+
 ```
-Your answer...
+From my research, a type 1 model would overwrite the old customer address with the new one, while a type 2 model would retain changes.
+In my opinion, in a bookstore database, it'd be more useful to overwrite the old addresses with new ones since keeping data that is not
+utilized would be redundant. However, if address types are not being considered (i.e., home, billing or shipping), a type 1 model might 
+results in a loss of important data. In my model, I have incorporated another table to define address types -- this can come handy if a 
+customer's home and billing addresses are different, and the correct address type can be updated when needed. 
 ```
 
 ***
